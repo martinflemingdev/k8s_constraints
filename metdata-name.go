@@ -8,9 +8,9 @@ func ValidateMetadataName(name string) error {
 	}
 
 	// Validate DNS Subdomain format
-	if err := ValidateDNSSubdomain(name); err != nil {
-		errs = append(errs, err)
-	}
+	// if err := ValidateDNSSubdomain(name); err != nil {
+	// 	errs = append(errs, err)
+	// }
 
 	// If there are errors, join and return them
 	if len(errs) > 0 {
@@ -20,17 +20,20 @@ func ValidateMetadataName(name string) error {
 	return nil
 }
 
-// ValidateDNSSubdomain validates a string against the DNS subdomain format as defined by RFC 1123.
-// Kubernetes uses this for metadata.name and similar fields.
-func ValidateDNSSubdomain(subdomain string) error {
-	// DNS subdomain format: Lowercase alphanumeric, `-`, `.` allowed.
-	// Must start/end with alphanumeric, max 253 characters.
-	subdomainPattern := regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
-	if !subdomainPattern.MatchString(subdomain) {
-		return errors.New("subdomain must match DNS subdomain format (lowercase alphanumeric, `-`, `.`, max 253 characters, must start and end with alphanumeric)")
+// ValidateMetadataName validates the metadata.name field in a Kubernetes manifest.
+func ValidateMetadataName(name string) error {
+	// Regex for DNS label format (no dots, lowercase only)
+	namePattern := regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
+
+	if len(name) > 253 {
+		return fmt.Errorf("metadata.name exceeds maximum length of 253 characters")
+	}
+	if !namePattern.MatchString(name) {
+		return errors.New("metadata.name must consist of lowercase alphanumeric characters or '-', must start and end with an alphanumeric character, and must not contain '.'")
 	}
 	return nil
 }
+
 
 // ValidateLength checks if a string exceeds the maximum allowed length.
 func ValidateLength(input string, maxLength int) error {
