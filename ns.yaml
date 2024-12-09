@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: example-namespace
   labels:
-    a.....!......________-------z: test
+    app._com/some-name: test
