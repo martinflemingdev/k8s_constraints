@@ -60,3 +60,19 @@ func ValidateLabelOrAnnotationNamePart(name string) error {
 	}
 	return nil
 }
+
+// ValidateAPIGroup validates the group part of an apiVersion.
+// Groups may include uppercase and lowercase alphanumeric characters, '.', and '-'.
+// Groups must start and end with an alphanumeric character and have a maximum length of 253 characters.
+func ValidateAPIGroup(group string) error {
+	// Regex to match valid group names (e.g., example.com, My-Group)
+	groupPattern := regexp.MustCompile(`^[A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?$`)
+
+	if len(group) > 253 {
+		return fmt.Errorf("API group exceeds maximum length of 253 characters")
+	}
+	if !groupPattern.MatchString(group) {
+		return errors.New("API group must consist of alphanumeric characters, '-', '.', and must start and end with an alphanumeric character")
+	}
+	return nil
+}
