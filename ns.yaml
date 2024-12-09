@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: example-namespace
   labels:
-    example.com/UPPER: ""
+    example.com/UPPER: "a._-z"
