@@ -1,6 +1,6 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: exampleNamespace
+  name: example-namespace
   labels:
-    valid_key-without.prefix: test
+    example.com/UPPER: UPPER
